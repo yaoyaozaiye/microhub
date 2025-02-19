@@ -1,9 +1,9 @@
 version: '3.8'
 
 services:
-  storage-system:
+  java-app:
     build: .
-    container_name: storage-system
+    container_name: java-app
     ports:
       - "8080:8080"
     volumes:
