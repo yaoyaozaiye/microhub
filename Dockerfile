@@ -22,7 +22,7 @@ FROM openjdk:8-jre-slim
 WORKDIR /app
 
 # 从构建阶段复制jar文件
-COPY --from=builder /app/target/storage-system-1.0.0.jar app.jar
+COPY --from=builder /app/target/*.jar app.jar
 
 # 创建数据目录
 RUN mkdir -p /app/data
@@ -30,8 +30,10 @@ RUN mkdir -p /app/data
 # 设置数据卷
 VOLUME /app/data
 
+ENV SERVER_PORT=8081
+
 # 暴露端口
-EXPOSE 8080
+EXPOSE 8081
 
 # 设置启动命令
-ENTRYPOINT ["java", "-jar", "app.jar"]
+CMD ["sh", "-c", "java -jar app.jar --server.port=${SERVER_PORT}"]
