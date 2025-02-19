@@ -12,10 +12,13 @@ target/
 # IDE files
 .idea/
 *.iml
-.vscode/
 .project
 .classpath
 .settings/
+
+# 允许.vscode/settings.json
+.vscode/*
+!.vscode/settings.json
 
 # OS generated files
 .DS_Store
