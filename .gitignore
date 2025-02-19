@@ -1,0 +1,25 @@
+# Compiled class files
+target/
+*.class
+
+# SQLite database files
+*.sqlite
+*.db
+
+# Log files
+*.log
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+.project
+.classpath
+.settings/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
