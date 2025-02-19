@@ -4,6 +4,10 @@ FROM maven:3.8.4-openjdk-8 AS builder
 # 设置工作目录
 WORKDIR /app
 
+COPY settings.xml /usr/share/maven/ref/
+
+ENV MAVEN_CONFIG=/usr/share/maven/ref
+
 # 复制pom.xml
 COPY pom.xml .
 
