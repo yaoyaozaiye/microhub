@@ -4,21 +4,19 @@ FROM maven:3.8.4-openjdk-8 AS builder
 # 设置工作目录
 WORKDIR /app
 
-COPY settings.xml /usr/share/maven/ref/
-
-ENV MAVEN_CONFIG=/usr/share/maven/ref
+COPY settings.xml .
 
 # 复制pom.xml
 COPY pom.xml .
 
 # 下载依赖
-RUN mvn dependency:go-offline
+RUN mvn dependency:go-offline -s /app/settings.xml
 
 # 复制源代码
 COPY src ./src
 
 # 构建应用
-RUN mvn package -DskipTests
+RUN mvn package -DskipTests -s /app/settings.xml
 
 # 运行阶段
 FROM openjdk:8-jre-slim
