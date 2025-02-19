@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  storage-system:
+    build: .
+    container_name: storage-system
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./data:/app/data
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:sqlite:/app/data/storage.sqlite
+    restart: unless-stopped

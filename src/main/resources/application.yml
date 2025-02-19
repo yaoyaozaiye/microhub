@@ -3,7 +3,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:sqlite:storage.sqlite
+    url: ${SPRING_DATASOURCE_URL:jdbc:sqlite:storage.sqlite}
     driver-class-name: org.sqlite.JDBC
   jpa:
     database-platform: org.sqlite.hibernate.dialect.SQLiteDialect
@@ -16,5 +16,5 @@ spring:
 
 logging:
   level:
-    org.springframework.web: DEBUG
-    com.personal.storage: DEBUG
+    org.springframework.web: INFO
+    com.personal.storage: INFO
