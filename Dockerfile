@@ -23,6 +23,10 @@ FROM openjdk:8-jre-slim
 
 WORKDIR /app
 
+RUN apt-get update && \
+    apt-get install -y bash curl wget net-tools iputils-ping strace lsof htop tcpdump make gcc g++ python3 git && \
+    rm -rf /var/lib/apt/lists/*
+
 # 从构建阶段复制jar文件
 COPY --from=builder /app/target/*.jar app.jar
 
