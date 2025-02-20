@@ -13,15 +13,18 @@ import java.util.Properties;
 @Configuration
 public class SQLiteConfig {
 
-   // @Bean
+   @Value("${spring.datasource.url}")
+   private String url;
+
+   @Bean
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("org.sqlite.JDBC");
-        dataSource.setUrl("jdbc:sqlite:storage.db");
+        dataSource.setUrl(url);
         return dataSource;
     }
 
-   // @Bean
+   @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(dataSource());
