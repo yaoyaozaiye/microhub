@@ -23,7 +23,7 @@ FROM openjdk:8-jre-slim
 
 WORKDIR /app
 
-RUN cat > /etc/apt/sources.list << EOF
+RUN cat <<EOF > /etc/apt/sources.list
 deb http://mirrors.aliyun.com/debian/ bullseye main non-free contrib
 deb-src http://mirrors.aliyun.com/debian/ bullseye main non-free contrib
 deb http://mirrors.aliyun.com/debian-security/ bullseye-security main
