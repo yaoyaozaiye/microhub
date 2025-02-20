@@ -13,7 +13,7 @@ import java.util.Properties;
 @Configuration
 public class SQLiteConfig {
 
-    @Bean
+   // @Bean
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("org.sqlite.JDBC");
@@ -21,7 +21,7 @@ public class SQLiteConfig {
         return dataSource;
     }
 
-    @Bean
+   // @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(dataSource());
