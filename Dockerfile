@@ -23,6 +23,8 @@ FROM openjdk:8-jre-slim
 
 WORKDIR /app
 
+COPY aliyun.sources /etc/apt/sources.list.d/aliyun.sources
+
 RUN apt-get update && \
     apt-get install -y bash curl wget net-tools iputils-ping git && \
     rm -rf /var/lib/apt/lists/*
