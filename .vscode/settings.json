@@ -6,5 +6,7 @@
     "editor.formatOnType": true,
     "files.trimTrailingWhitespace": true,
     "files.insertFinalNewline": true,
-    "files.trimFinalNewlines": true
+    "files.trimFinalNewlines": true,
+    "java.compile.nullAnalysis.mode": "automatic",
+    "java.configuration.updateBuildConfiguration": "automatic"
 }

@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.stream.Collectors;
 
-@Controller
+//@Controller
 public class WebController {
 
     @Autowired
@@ -29,11 +29,10 @@ public class WebController {
     public String saveItem(@ModelAttribute("formItem") Item item, @RequestParam(required = false) String tagString) {
         if (tagString != null && !tagString.trim().isEmpty()) {
             item.setTags(
-                Arrays.stream(tagString.split(","))
-                    .map(String::trim)
-                    .filter(tag -> !tag.isEmpty())
-                    .collect(Collectors.toCollection(HashSet::new))
-            );
+                    Arrays.stream(tagString.split(","))
+                            .map(String::trim)
+                            .filter(tag -> !tag.isEmpty())
+                            .collect(Collectors.toCollection(HashSet::new)));
         }
         itemService.saveItem(item);
         return "redirect:/";
@@ -48,7 +47,7 @@ public class WebController {
     @GetMapping("/item/edit/{id}")
     public String editItem(@PathVariable Long id, Model model) {
         Item item = itemService.findById(id)
-            .orElseThrow(() -> new EntityNotFoundException("Item not found with id: " + id));
+                .orElseThrow(() -> new EntityNotFoundException("Item not found with id: " + id));
         model.addAttribute("items", itemService.findAll());
         model.addAttribute("formItem", item);
         return "index";

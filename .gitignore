@@ -30,3 +30,5 @@ target/
 # Docker
 data/
 .docker/
+
+node/
