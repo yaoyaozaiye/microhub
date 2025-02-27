@@ -18,7 +18,7 @@ COPY src-webui ./src-webui
 
 # Download and install nvm:
 RUN curl -fsSL https://gitee.com/sdq/nvm/raw/master/install.sh | bash \
-    && source "$HOME/.nvm/nvm.sh" \
+    && . "$HOME/.nvm/nvm.sh" \
     && nvm install 22 \
     && node -v \
     && nvm current \
