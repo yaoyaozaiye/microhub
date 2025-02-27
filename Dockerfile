@@ -16,7 +16,7 @@ RUN mvn dependency:go-offline -s /app/settings.xml
 COPY src ./src
 
 # 构建应用
-RUN mvn package -DskipTests -s /app/settings.xml
+RUN mvn clean package -DskipTests -s /app/settings.xml -P ci
 
 # 运行阶段
 FROM openjdk:8-jre-slim
@@ -31,7 +31,7 @@ deb-src http://mirrors.aliyun.com/debian-security/ bullseye-security main
 deb http://mirrors.aliyun.com/debian/ bullseye-updates main non-free contrib
 deb-src http://mirrors.aliyun.com/debian/ bullseye-updates main non-free contrib
 EOF
-    
+
 RUN apt-get update && \
     apt-get install -y bash curl wget net-tools iputils-ping git && \
     rm -rf /var/lib/apt/lists/*

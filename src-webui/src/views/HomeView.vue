@@ -1,9 +1,9 @@
 <script setup>
-import TheWelcome from '../components/TheWelcome.vue'
+import ItemManagement from '../components/ItemManagement.vue'
 </script>
 
 <template>
   <main>
-    <TheWelcome />
+    <ItemManagement />
   </main>
 </template>
