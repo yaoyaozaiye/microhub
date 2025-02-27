@@ -6,8 +6,10 @@ import { RouterLink, RouterView } from 'vue-router'
   <div class="app-container">
     <h1 class="app-title">物品管理系统</h1>
     <div class="nav-container">
-      <RouterLink to="/" class="nav-item">首页</RouterLink>
-      <RouterLink to="/about" class="nav-item">关于</RouterLink>
+      <div class="nav-links">
+        <RouterLink to="/" class="nav-item">首页</RouterLink>
+        <RouterLink to="/about" class="nav-item">关于</RouterLink>
+      </div>
     </div>
     <RouterView />
   </div>
@@ -30,9 +32,17 @@ import { RouterLink, RouterView } from 'vue-router'
 }
 
 .nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   border-bottom: 2px solid #e8e8e8;
   padding-bottom: 1rem;
   margin-bottom: 2rem;
+}
+
+.nav-links {
+  display: flex;
+  gap: 1rem;
 }
 
 .nav-item {
