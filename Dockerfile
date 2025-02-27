@@ -16,7 +16,7 @@ RUN mvn dependency:go-offline -s /app/settings.xml
 COPY src ./src
 
 # Download and install nvm:
-RUN curl -o- https://ghfast.top/https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash \
+RUN curl -fsSL https://gitee.com/sdq/nvm/raw/master/install.sh | bash \
     && source "$HOME/.nvm/nvm.sh" \
     && nvm install 22 \
     && node -v \
