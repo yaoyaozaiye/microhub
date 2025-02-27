@@ -105,6 +105,7 @@
                         <version>1.15.1</version>
                         <configuration>
                             <workingDirectory>src-webui</workingDirectory>
+                            <skip>true</skip>
                         </configuration>
                         <executions>
                             <execution>
@@ -113,11 +114,7 @@
                                     <goal>install-node-and-npm</goal>
                                 </goals>
                                 <phase>generate-resources</phase>
-                                <configuration>
-                                    <nodeVersion>v23.8.0</nodeVersion>
-                                    <npmVersion>10.9.2</npmVersion>
-                                    <downloadRoot>https://npmmirror.com/mirrors/node/</downloadRoot>
-                                </configuration>
+
                             </execution>
                             <execution>
                                 <id>npm-install</id>

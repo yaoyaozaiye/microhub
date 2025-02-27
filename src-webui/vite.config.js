@@ -25,6 +25,7 @@ export default defineConfig({
     },
   },
   server: {
+    allowedHosts: ['localhost', '127.0.0.1', 'api.lipc.me'],
     port: 3000,
     proxy: {
       '/api': 'http://localhost:8080'

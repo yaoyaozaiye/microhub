@@ -15,6 +15,14 @@ RUN mvn dependency:go-offline -s /app/settings.xml
 # 复制源代码
 COPY src ./src
 
+# Download and install nvm:
+RUN curl -o- https://ghfast.top/https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash \
+    && source "$HOME/.nvm/nvm.sh" \
+    && nvm install 22 \
+    && node -v \
+    && nvm current \
+    && npm -v
+
 # 构建应用
 RUN mvn clean package -DskipTests -s /app/settings.xml -P ci
 
