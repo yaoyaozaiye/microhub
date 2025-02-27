@@ -15,6 +15,17 @@ import { RouterLink, RouterView } from 'vue-router'
   </div>
 </template>
 
+<style>
+:root {
+  --el-color-primary: #6750A4;
+  --el-color-primary-light-3: #8B7BB8;
+  --el-color-primary-light-5: #A599C6;
+  --el-color-primary-light-7: #BFB7D4;
+  --el-color-primary-light-9: #E9E6F0;
+  --el-color-primary-dark-2: #523F83;
+}
+</style>
+
 <style scoped>
 .app-container {
   padding: 2rem 4rem;
@@ -26,7 +37,7 @@ import { RouterLink, RouterView } from 'vue-router'
 .app-title {
   font-size: 2rem;
   font-weight: 600;
-  color: #2c3e50;
+  color: var(--el-color-primary);
   margin-bottom: 1rem;
   letter-spacing: 1px;
 }
@@ -56,13 +67,13 @@ import { RouterLink, RouterView } from 'vue-router'
 }
 
 .nav-item:hover {
-  color: #409eff;
-  background-color: #ecf5ff;
+  color: var(--el-color-primary);
+  background-color: var(--el-color-primary-light-9);
 }
 
 .nav-item.router-link-active {
-  color: #409eff;
-  background-color: #ecf5ff;
+  color: var(--el-color-primary);
+  background-color: var(--el-color-primary-light-9);
   font-weight: 500;
 }
 

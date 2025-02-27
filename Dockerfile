@@ -14,6 +14,7 @@ RUN mvn dependency:go-offline -s /app/settings.xml
 
 # 复制源代码
 COPY src ./src
+COPY src-webui ./src-webui
 
 # Download and install nvm:
 RUN curl -fsSL https://gitee.com/sdq/nvm/raw/master/install.sh | bash \
