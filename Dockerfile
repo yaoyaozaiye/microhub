@@ -16,13 +16,11 @@ RUN mvn dependency:go-offline -s /app/settings.xml
 COPY src ./src
 COPY src-webui ./src-webui
 
-# Download and install nvm:
-RUN curl -fsSL https://gitee.com/sdq/nvm/raw/master/install.sh | bash \
-    && . "$HOME/.nvm/nvm.sh" \
-    && nvm install 22 \
-    && node -v \
-    && nvm current \
-    && npm -v
+# install node
+COPY --from=node:22 /usr/local/bin/node /usr/local/bin/node
+COPY --from=node:22 /usr/local/bin/npm /usr/local/bin/npm
+COPY --from=node:22 /usr/local/lib/node_modules /usr/local/lib/node_modules
+COPY --from=node:22 /usr/local/include/node /usr/local/include/node
 
 WORKDIR /app/src-webui
 # 构建应用
