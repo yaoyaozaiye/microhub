@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { Edit, Delete } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 
@@ -107,11 +107,20 @@ onMounted(() => {
 defineExpose({
   fetchItems
 })
+
+const isMobile = computed(() => {
+  return window.innerWidth <= 768
+})
 </script>
 
 <template>
   <div class="table-container">
-    <el-table :data="items" style="width: 100%">
+    <!-- 桌面端表格 -->
+    <el-table
+      v-if="!isMobile"
+      :data="items"
+      style="width: 100%"
+    >
       <el-table-column prop="name" label="名称" />
       <el-table-column prop="description" label="描述" />
       <el-table-column label="状态" width="100">
@@ -163,11 +172,53 @@ defineExpose({
       </el-table-column>
     </el-table>
 
+    <!-- 移动端卡片列表 -->
+    <div v-else class="mobile-item-list">
+      <el-card v-for="item in items" :key="item.id" class="mobile-item-card">
+        <div class="mobile-item-header">
+          <h3>{{ item.name }}</h3>
+          <el-tag :type="item.status === 'IN_USE' ? 'success' : item.status === 'STORED' ? 'info' : 'warning'">
+            {{ statusOptions.find(opt => opt.value === item.status)?.label }}
+          </el-tag>
+        </div>
+
+        <div class="mobile-item-content">
+          <p v-if="item.description" class="description">{{ item.description }}</p>
+
+          <div class="info-row">
+            <span class="label">购买价格:</span>
+            <span class="value">¥{{ item.purchaseValue }}</span>
+          </div>
+
+          <div class="info-row">
+            <span class="label">购买日期:</span>
+            <span class="value">{{ new Date(item.purchaseDate).toLocaleDateString() }}</span>
+          </div>
+
+          <div class="tags-row" v-if="item.tags && item.tags.length">
+            <el-tag
+              v-for="tag in (Array.isArray(item.tags) ? item.tags : item.tags.split(','))"
+              :key="tag"
+              size="small"
+              class="mx-1"
+            >
+              {{ tag.trim() }}
+            </el-tag>
+          </div>
+        </div>
+
+        <div class="mobile-item-actions">
+          <el-button type="primary" :icon="Edit" @click="handleEdit(item)">编辑</el-button>
+          <el-button type="danger" :icon="Delete" @click="deleteItem(item.id)">删除</el-button>
+        </div>
+      </el-card>
+    </div>
+
     <!-- 编辑对话框 -->
     <el-dialog
       v-model="editDialogVisible"
       title="编辑物品"
-      width="500px"
+      :width="isMobile ? '95%' : '500px'"
     >
       <el-form>
         <el-form-item label="名称">
@@ -236,5 +287,96 @@ defineExpose({
 
 :deep(.el-tag) {
   margin: 2px;
+}
+
+/* 移动端样式 */
+.mobile-item-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.mobile-item-card {
+  margin-bottom: 0;
+}
+
+.mobile-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.mobile-item-header h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.mobile-item-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.description {
+  color: #666;
+  margin: 0;
+  font-size: 14px;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+}
+
+.info-row .label {
+  color: #909399;
+}
+
+.tags-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 8px;
+}
+
+.mobile-item-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.mobile-item-actions .el-button {
+  flex: 1;
+}
+
+@media screen and (max-width: 768px) {
+  .table-container {
+    padding: 12px;
+  }
+
+  :deep(.el-dialog) {
+    margin: 0 !important;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    border-radius: 20px 20px 0 0;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  :deep(.el-dialog__body) {
+    padding: 15px;
+    max-height: calc(90vh - 120px);
+    overflow-y: auto;
+  }
+
+  :deep(.el-form-item) {
+    margin-bottom: 15px;
+  }
 }
 </style>
