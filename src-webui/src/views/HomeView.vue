@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { Plus } from '@element-plus/icons-vue'
 import ItemManagement from '../components/ItemManagement.vue'
 import { ElMessage } from 'element-plus'
@@ -21,6 +21,10 @@ const statusOptions = [
 ]
 
 const itemManagementRef = ref(null)
+
+const isMobile = computed(() => {
+  return window.innerWidth <= 768
+})
 
 const handleSubmit = async () => {
   try {
@@ -80,9 +84,10 @@ const handleSubmit = async () => {
     <el-dialog
       v-model="showAddItemDialog"
       title="添加新物品"
-      width="500px"
+      :width="isMobile ? '95%' : '500px'"
+      class="add-item-dialog"
     >
-      <el-form @submit.prevent="handleSubmit">
+      <el-form @submit.prevent="handleSubmit" label-position="top">
         <el-form-item label="名称">
           <el-input v-model="newItem.name" placeholder="请输入物品名称" />
         </el-form-item>
@@ -168,5 +173,61 @@ const handleSubmit = async () => {
 
 :deep(.el-dialog__body) {
   padding: 20px 30px;
+}
+
+/* 移动端适配样式 */
+@media screen and (max-width: 768px) {
+  .home-header {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+  }
+
+  .home-header h2 {
+    text-align: center;
+  }
+
+  :deep(.el-dialog) {
+    margin: 0 !important;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    border-radius: 20px 20px 0 0;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  :deep(.el-dialog__body) {
+    padding: 15px;
+    max-height: calc(90vh - 120px);
+    overflow-y: auto;
+  }
+
+  :deep(.el-input),
+  :deep(.el-textarea__inner),
+  :deep(.el-date-picker),
+  :deep(.el-select) {
+    width: 100% !important;
+    max-width: 100%;
+  }
+
+  :deep(.el-form-item__label) {
+    padding-bottom: 4px;
+  }
+
+  :deep(.dialog-footer) {
+    padding: 10px 0;
+  }
+
+  :deep(.el-button) {
+    width: 100%;
+    margin-left: 0 !important;
+  }
+
+  .dialog-footer {
+    flex-direction: column;
+    width: 100%;
+  }
 }
 </style>
