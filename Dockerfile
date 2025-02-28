@@ -24,9 +24,12 @@ RUN curl -fsSL https://gitee.com/sdq/nvm/raw/master/install.sh | bash \
     && nvm current \
     && npm -v
 
-
+WORKDIR /app/src-webui
 # 构建应用
-RUN npm install && npm run build && mvn clean package -DskipTests -s /app/settings.xml -P ci
+RUN npm install && npm run build
+
+WORKDIR /app
+RUN mvn clean package -DskipTests -s /app/settings.xml -P ci
 
 # 运行阶段
 FROM openjdk:8-jre-slim
