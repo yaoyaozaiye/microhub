@@ -219,19 +219,23 @@ const isMobile = computed(() => {
       v-model="editDialogVisible"
       title="编辑物品"
       :width="isMobile ? '95%' : '500px'"
+      class="edit-item-dialog"
     >
-      <el-form>
+      <el-form @submit.prevent="saveEdit" label-position="top">
         <el-form-item label="名称">
-          <el-input v-model="editingItem.name" />
+          <el-input v-model="editingItem.name" placeholder="请输入物品名称" />
         </el-form-item>
+
         <el-form-item label="描述">
           <el-input
             v-model="editingItem.description"
             type="textarea"
+            placeholder="请输入物品描述"
           />
         </el-form-item>
+
         <el-form-item label="状态">
-          <el-select v-model="editingItem.status">
+          <el-select v-model="editingItem.status" placeholder="请选择状态" style="width: 100%">
             <el-option
               v-for="option in statusOptions"
               :key="option.value"
@@ -240,20 +244,26 @@ const isMobile = computed(() => {
             />
           </el-select>
         </el-form-item>
+
         <el-form-item label="购买价格">
           <el-input
             v-model="editingItem.purchaseValue"
             type="number"
+            placeholder="请输入购买价格"
           >
             <template #prefix>¥</template>
           </el-input>
         </el-form-item>
+
         <el-form-item label="购买日期">
           <el-date-picker
             v-model="editingItem.purchaseDate"
             type="date"
+            placeholder="选择日期"
+            style="width: 100%"
           />
         </el-form-item>
+
         <el-form-item label="标签">
           <el-input
             v-model="editingItem.tags"
@@ -261,6 +271,7 @@ const isMobile = computed(() => {
           />
         </el-form-item>
       </el-form>
+
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="editDialogVisible = false">取消</el-button>
@@ -375,8 +386,30 @@ const isMobile = computed(() => {
     overflow-y: auto;
   }
 
-  :deep(.el-form-item) {
-    margin-bottom: 15px;
+  :deep(.el-input),
+  :deep(.el-textarea__inner),
+  :deep(.el-date-picker),
+  :deep(.el-select) {
+    width: 100% !important;
+    max-width: 100%;
+  }
+
+  :deep(.el-form-item__label) {
+    padding-bottom: 4px;
+  }
+
+  :deep(.dialog-footer) {
+    padding: 10px 0;
+  }
+
+  :deep(.el-button) {
+    width: 100%;
+    margin-left: 0 !important;
+  }
+
+  .dialog-footer {
+    flex-direction: column;
+    width: 100%;
   }
 }
 </style>
