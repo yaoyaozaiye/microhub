@@ -18,9 +18,8 @@ COPY src-webui ./src-webui
 
 # install node
 COPY --from=node:22 /usr/local/bin/node /usr/local/bin/node
-COPY --from=node:22 /usr/local/bin/npm /usr/local/bin/npm
-COPY --from=node:22 /usr/local/lib/node_modules /usr/local/lib/node_modules
-COPY --from=node:22 /usr/local/include/node /usr/local/include/node
+COPY --from=node:22 /usr/local/lib/node_modules/npm /usr/local/lib/node_modules/npm
+RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm
 
 WORKDIR /app/src-webui
 # 构建应用
