@@ -1,5 +1,14 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
+import { ref } from 'vue'
+import { Search } from '@element-plus/icons-vue'
+
+const searchQuery = ref('')
+
+const handleSearch = () => {
+  // 这里可以实现搜索逻辑
+  console.log('Search query:', searchQuery.value)
+}
 </script>
 
 <template>
@@ -9,6 +18,19 @@ import { RouterLink, RouterView } from 'vue-router'
       <div class="nav-links">
         <RouterLink to="/" class="nav-item">首页</RouterLink>
         <RouterLink to="/about" class="nav-item">关于</RouterLink>
+      </div>
+      <div class="search-container">
+        <el-input
+          v-model="searchQuery"
+          placeholder="搜索物品..."
+          class="search-input"
+          :prefix-icon="Search"
+          @keyup.enter="handleSearch"
+        >
+          <template #append>
+            <el-button :icon="Search" @click="handleSearch" />
+          </template>
+        </el-input>
       </div>
     </div>
     <RouterView />
@@ -49,6 +71,7 @@ import { RouterLink, RouterView } from 'vue-router'
   border-bottom: 2px solid #e8e8e8;
   padding-bottom: 1rem;
   margin-bottom: 2rem;
+  gap: 1rem;
 }
 
 .nav-links {
@@ -77,6 +100,16 @@ import { RouterLink, RouterView } from 'vue-router'
   font-weight: 500;
 }
 
+.search-container {
+  flex: 1;
+  max-width: 400px;
+  margin-left: auto;
+}
+
+.search-input {
+  width: 100%;
+}
+
 @media (max-width: 1440px) {
   .app-container {
     padding: 2rem;
@@ -86,6 +119,20 @@ import { RouterLink, RouterView } from 'vue-router'
 @media (max-width: 768px) {
   .app-container {
     padding: 1rem;
+  }
+
+  .nav-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-container {
+    max-width: none;
+    margin-left: 0;
+  }
+
+  .nav-links {
+    justify-content: center;
   }
 }
 </style>

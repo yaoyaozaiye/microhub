@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
-import { Edit, Delete } from '@element-plus/icons-vue'
+import { Edit, Delete, More } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 
 const items = ref([])
@@ -111,6 +111,16 @@ defineExpose({
 const isMobile = computed(() => {
   return window.innerWidth <= 768
 })
+
+const expandedItems = ref(new Set())
+
+const toggleItem = (itemId) => {
+  if (expandedItems.value.has(itemId)) {
+    expandedItems.value.delete(itemId)
+  } else {
+    expandedItems.value = new Set([itemId])
+  }
+}
 </script>
 
 <template>
@@ -172,46 +182,76 @@ const isMobile = computed(() => {
       </el-table-column>
     </el-table>
 
-    <!-- 移动端卡片列表 -->
+    <!-- 移动端列表 -->
     <div v-else class="mobile-item-list">
-      <el-card v-for="item in items" :key="item.id" class="mobile-item-card">
+      <!-- 表头 -->
+      <div class="mobile-list-header">
+        <div class="basic-info-row">
+          <div class="name">名称</div>
+          <div class="description">描述</div>
+          <div class="price">价格</div>
+        </div>
+      </div>
+
+      <!-- 列表内容 -->
+      <div
+        v-for="item in items"
+        :key="item.id"
+        class="mobile-item"
+        @click="toggleItem(item.id)"
+      >
         <div class="mobile-item-header">
-          <h3>{{ item.name }}</h3>
-          <el-tag :type="item.status === 'IN_USE' ? 'success' : item.status === 'STORED' ? 'info' : 'warning'">
-            {{ statusOptions.find(opt => opt.value === item.status)?.label }}
-          </el-tag>
+          <div class="mobile-item-basic">
+            <div class="basic-info-row">
+              <h3 class="name">{{ item.name }}</h3>
+              <p class="description">{{ item.description }}</p>
+              <div class="price">¥{{ item.purchaseValue }}</div>
+            </div>
+          </div>
         </div>
 
-        <div class="mobile-item-content">
-          <p v-if="item.description" class="description">{{ item.description }}</p>
-
+        <!-- 展开后显示的详细信息 -->
+        <div v-show="expandedItems.has(item.id)" class="mobile-item-details">
           <div class="info-row">
-            <span class="label">购买价格:</span>
-            <span class="value">¥{{ item.purchaseValue }}</span>
+            <span class="label">状态:</span>
+            <el-tag :type="item.status === 'IN_USE' ? 'success' : item.status === 'STORED' ? 'info' : 'warning'">
+              {{ statusOptions.find(opt => opt.value === item.status)?.label }}
+            </el-tag>
           </div>
 
           <div class="info-row">
             <span class="label">购买日期:</span>
-            <span class="value">{{ new Date(item.purchaseDate).toLocaleDateString() }}</span>
+            <span>{{ new Date(item.purchaseDate).toLocaleDateString() }}</span>
           </div>
 
           <div class="tags-row" v-if="item.tags && item.tags.length">
-            <el-tag
-              v-for="tag in (Array.isArray(item.tags) ? item.tags : item.tags.split(','))"
-              :key="tag"
-              size="small"
-              class="mx-1"
-            >
-              {{ tag.trim() }}
-            </el-tag>
+            <span class="label">标签:</span>
+            <div class="tags-container">
+              <el-tag
+                v-for="tag in (Array.isArray(item.tags) ? item.tags : item.tags.split(','))"
+                :key="tag"
+                size="small"
+                class="mx-1"
+              >
+                {{ tag.trim() }}
+              </el-tag>
+            </div>
+          </div>
+
+          <div class="action-row">
+            <el-button
+              type="primary"
+              :icon="Edit"
+              @click.stop="handleEdit(item)"
+            >编辑</el-button>
+            <el-button
+              type="danger"
+              :icon="Delete"
+              @click.stop="deleteItem(item.id)"
+            >删除</el-button>
           </div>
         </div>
-
-        <div class="mobile-item-actions">
-          <el-button type="primary" :icon="Edit" @click="handleEdit(item)">编辑</el-button>
-          <el-button type="danger" :icon="Delete" @click="deleteItem(item.id)">删除</el-button>
-        </div>
-      </el-card>
+      </div>
     </div>
 
     <!-- 编辑对话框 -->
@@ -302,114 +342,180 @@ const isMobile = computed(() => {
 
 /* 移动端样式 */
 .mobile-item-list {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+  background: #fff;
 }
 
-.mobile-item-card {
-  margin-bottom: 0;
+.mobile-item {
+  padding: 12px 16px;
+  border-bottom: 1px solid #EBEEF5;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.mobile-item:active {
+  background-color: #f5f7fa;
 }
 
 .mobile-item-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
+  align-items: flex-start;
 }
 
-.mobile-item-header h3 {
+.mobile-item-basic {
+  flex: 1;
+}
+
+.basic-info-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.mobile-item-basic h3.name {
   margin: 0;
   font-size: 16px;
   font-weight: 600;
+  color: #303133;
+  white-space: nowrap;
 }
 
-.mobile-item-content {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.description {
-  color: #666;
+.mobile-item-basic .description {
   margin: 0;
+  color: #606266;
   font-size: 14px;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mobile-item-basic .price {
+  color: #409EFF;
+  font-weight: bold;
+  font-size: 16px;
+  white-space: nowrap;
+}
+
+.mobile-item-details {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #EBEEF5;
 }
 
 .info-row {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  font-size: 14px;
+  margin-bottom: 12px;
 }
 
 .info-row .label {
+  width: 70px;
   color: #909399;
+  font-size: 14px;
 }
 
 .tags-row {
   display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  margin-top: 8px;
+  margin-bottom: 12px;
 }
 
-.mobile-item-actions {
+.tags-row .label {
+  width: 70px;
+  color: #909399;
+  font-size: 14px;
+}
+
+.tags-container {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.action-row {
   display: flex;
   gap: 8px;
   margin-top: 16px;
 }
 
-.mobile-item-actions .el-button {
+.action-row .el-button {
+  position: relative;
+  z-index: 1;
+}
+
+.mobile-list-header {
+  background-color: #f5f7fa;
+  padding: 12px 16px;
+  border-bottom: 1px solid #EBEEF5;
+  font-size: 14px;
+  color: #909399;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.mobile-list-header .basic-info-row {
+  padding-right: 0; /* 移除之前为更多按钮预留的空间 */
+}
+
+.mobile-list-header .name {
+  width: 80px; /* 根据实际内容调整宽度 */
+}
+
+.mobile-list-header .description {
   flex: 1;
+}
+
+.mobile-list-header .price {
+  width: 60px; /* 根据实际内容调整宽度 */
+  text-align: right;
+}
+
+.mobile-item-basic .name {
+  width: 80px; /* 与表头对齐 */
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mobile-item-basic .price {
+  width: 60px; /* 与表头对齐 */
+  text-align: right;
+}
+
+/* 确保表头和内容的布局一致 */
+.basic-info-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.description {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 @media screen and (max-width: 768px) {
   .table-container {
-    padding: 12px;
+    padding: 0;
+    background: #fff;
   }
 
-  :deep(.el-dialog) {
-    margin: 0 !important;
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    border-radius: 20px 20px 0 0;
-    max-height: 90vh;
-    overflow-y: auto;
+  .mobile-item {
+    padding: 12px 16px;
+    border-bottom: 1px solid #EBEEF5;
   }
 
-  :deep(.el-dialog__body) {
-    padding: 15px;
-    max-height: calc(90vh - 120px);
-    overflow-y: auto;
+  .mobile-item:last-child {
+    border-bottom: none;
   }
 
-  :deep(.el-input),
-  :deep(.el-textarea__inner),
-  :deep(.el-date-picker),
-  :deep(.el-select) {
-    width: 100% !important;
-    max-width: 100%;
-  }
-
-  :deep(.el-form-item__label) {
-    padding-bottom: 4px;
-  }
-
-  :deep(.dialog-footer) {
-    padding: 10px 0;
-  }
-
-  :deep(.el-button) {
-    width: 100%;
-    margin-left: 0 !important;
-  }
-
-  .dialog-footer {
-    flex-direction: column;
-    width: 100%;
+  .mobile-item:hover {
+    background-color: #fafafa;
   }
 }
 </style>
