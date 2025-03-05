@@ -177,10 +177,15 @@ const handleSubmit = async () => {
 
 /* 移动端适配样式 */
 @media screen and (max-width: 768px) {
+  .home-container {
+    padding: 0;
+  }
+
   .home-header {
     flex-direction: column;
     gap: 1rem;
     align-items: stretch;
+    padding: 1rem;
   }
 
   .home-header h2 {
